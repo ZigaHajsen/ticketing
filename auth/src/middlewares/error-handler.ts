@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { DatabaseConnectionError, RequestValidationError } from '../errors';
 
 export const errorHandler = (
   err: Error,
@@ -6,9 +7,30 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('Something went wrong', err);
+  if (err instanceof RequestValidationError) {
+    const formattedErrors = err.errors.map((error) => {
+      return {
+        message: error.msg,
+        field: error.param,
+      };
+    });
 
-  res.status(400).send({
-    message: err.message,
+    return res.status(400).send({ errors: formattedErrors });
+  }
+
+  if (err instanceof DatabaseConnectionError) {
+    const formattedErrors = [
+      {
+        message: err.reason,
+      },
+    ];
+
+    return res.status(500).send({ errors: formattedErrors });
+  }
+
+  const defaultError = [{ message: 'Something went wrong' }];
+
+  res.status(500).send({
+    errors: defaultError,
   });
 };
