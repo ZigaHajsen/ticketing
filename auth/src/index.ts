@@ -1,4 +1,5 @@
 import express from 'express';
+import { NotFoundError } from './errors';
 import { errorHandler } from './middlewares';
 import {
   currentUserRouter,
@@ -15,6 +16,10 @@ app.use(currentUserRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
 app.use(signupRouter);
+
+app.all('*', () => {
+  throw new NotFoundError();
+});
 
 app.use(errorHandler);
 
