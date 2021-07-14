@@ -1,6 +1,7 @@
 import express from 'express';
 import 'express-async-errors';
 import mongoose from 'mongoose';
+import cookieSession from 'cookie-session';
 
 import { NotFoundError } from './errors';
 import { errorHandler } from './middlewares';
@@ -12,8 +13,15 @@ import {
 } from './routes';
 
 const app = express();
+app.set('trust proxy', true);
 
 app.use(express.json());
+app.use(
+  cookieSession({
+    signed: false,
+    secure: true,
+  })
+);
 
 app.use(currentUserRouter);
 app.use(signinRouter);
