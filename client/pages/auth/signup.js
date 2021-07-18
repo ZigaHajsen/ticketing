@@ -1,19 +1,25 @@
 import { useState } from 'react';
+import axios from 'axios';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log(email, password);
+    const response = await axios.post('/api/users/signup', {
+      email,
+      password,
+    });
+
+    console.log(response.data);
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h1>Sign Up</h1>
-      <div className='form-group'>
+      <div className='form-group mt-3'>
         <label>Email Adress</label>
         <input
           className='form-control'
@@ -22,7 +28,7 @@ const Signup = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
       </div>
-      <div className='form-group'>
+      <div className='form-group mt-3'>
         <label>Password</label>
         <input
           className='form-control'
@@ -31,7 +37,7 @@ const Signup = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      <button className='btn btn-primary'>Sign Up</button>
+      <button className='btn btn-primary mt-3'>Sign Up</button>
     </form>
   );
 };
