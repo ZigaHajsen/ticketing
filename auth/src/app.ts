@@ -1,10 +1,8 @@
 import express from 'express';
 import 'express-async-errors';
-
 import cookieSession from 'cookie-session';
+import { NotFoundError, errorHandler } from '@zhtickets/common';
 
-import { NotFoundError } from './errors';
-import { errorHandler } from './middlewares';
 import {
   currentUserRouter,
   signinRouter,
