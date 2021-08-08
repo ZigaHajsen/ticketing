@@ -7,7 +7,20 @@ it('has a route handler listening to /api/tickets from post requests', async () 
   expect(response.status).not.toEqual(404);
 });
 
-it('can only be accessed if user is signed in', async () => {});
+it('can only be accessed if user is signed in', async () => {
+  const response = await request(app).post('/api/tickets').send({});
+
+  expect(response.status).toEqual(401);
+});
+
+it('does not return 401 if user is signed in', async () => {
+  const response = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', global.signup())
+    .send({});
+
+  expect(response.status).not.toEqual(401);
+});
 
 it('return an error if invalid title is provided', async () => {});
 
