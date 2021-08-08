@@ -7,6 +7,7 @@ import {
   createTicketRouter,
   showTicketRouter,
   showTicketsRouter,
+  updateTicketRouter,
 } from './routes';
 
 export const app = express();
@@ -24,6 +25,7 @@ app.use(currentUser);
 app.use(createTicketRouter);
 app.use(showTicketRouter);
 app.use(showTicketsRouter);
+app.use(updateTicketRouter);
 
 app.all('*', async () => {
   throw new NotFoundError();
