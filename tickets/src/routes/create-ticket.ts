@@ -3,6 +3,7 @@ import { body } from 'express-validator';
 
 import { requireAuth, validateRequest } from '@zhtickets/common';
 import { Ticket } from '../models';
+import { TicketCreatedPublisher } from '../events';
 
 const router = express.Router();
 
@@ -25,6 +26,12 @@ router.post(
       userId: req.currentUser!.id,
     });
     await ticket.save();
+    await new TicketCreatedPublisher(client).publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId,
+    });
 
     res.status(201).send(ticket);
   }
