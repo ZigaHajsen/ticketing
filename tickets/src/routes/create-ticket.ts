@@ -3,7 +3,8 @@ import { body } from 'express-validator';
 
 import { requireAuth, validateRequest } from '@zhtickets/common';
 import { Ticket } from '../models';
-import { TicketCreatedPublisher } from '../events';
+import { TicketCreatedPublisher } from '../events/publishers';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -26,7 +27,7 @@ router.post(
       userId: req.currentUser!.id,
     });
     await ticket.save();
-    await new TicketCreatedPublisher(client).publish({
+    await new TicketCreatedPublisher(natsWrapper.client).publish({
       id: ticket.id,
       title: ticket.title,
       price: ticket.price,
