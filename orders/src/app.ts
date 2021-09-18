@@ -3,6 +3,13 @@ import 'express-async-errors';
 import cookieSession from 'cookie-session';
 import { NotFoundError, errorHandler, currentUser } from '@zhtickets/common';
 
+import {
+  newOrderRouter,
+  showOrderRouter,
+  showOrdersRouter,
+  deleteOrderRouter,
+} from './routes';
+
 export const app = express();
 app.set('trust proxy', true);
 
@@ -14,6 +21,11 @@ app.use(
   })
 );
 app.use(currentUser);
+
+app.use(newOrderRouter);
+app.use(showOrderRouter);
+app.use(showOrdersRouter);
+app.use(deleteOrderRouter);
 
 app.all('*', async () => {
   throw new NotFoundError();
