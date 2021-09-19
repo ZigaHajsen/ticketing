@@ -1,18 +1,19 @@
 import mongoose from 'mongoose';
 import { OrderStatus } from '@zhtickets/common';
+import { TicketDocument } from './ticket';
 
 interface OrderAttributes {
   userId: string;
   status: OrderStatus;
   expiresAt: Date;
-  // ticket: TicketDocument;
+  ticket: TicketDocument;
 }
 
 interface OrderDocument extends mongoose.Document {
   userId: string;
   status: OrderStatus;
   expiresAt: Date;
-  // ticket: TicketDocument;
+  ticket: TicketDocument;
 }
 
 interface OrderModel extends mongoose.Model<OrderDocument> {
