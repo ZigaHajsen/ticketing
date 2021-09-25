@@ -2,11 +2,10 @@ import express, { Request, Response } from 'express';
 import {
   NotAuthorizedError,
   NotFoundError,
-  OrderStatus,
   requireAuth,
 } from '@zhtickets/common';
 
-import { Order } from '../models';
+import { Order, OrderStatus } from '../models';
 
 const router = express.Router();
 
