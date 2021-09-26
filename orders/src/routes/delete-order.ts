@@ -6,6 +6,8 @@ import {
 } from '@zhtickets/common';
 
 import { Order, OrderStatus } from '../models';
+import { OrderCancelledPublisher } from '../events/publishers';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -15,7 +17,7 @@ router.delete(
   async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    const order = await Order.findById(id);
+    const order = await Order.findById(id).populate('ticket');
 
     if (!order) {
       throw new NotFoundError();
@@ -26,6 +28,13 @@ router.delete(
 
     order.status = OrderStatus.Cancelled;
     await order.save();
+
+    new OrderCancelledPublisher(natsWrapper.client).publish({
+      id: order.id,
+      ticket: {
+        id: order.ticket.id,
+      },
+    });
 
     res.status(204).send(order);
   }
