@@ -8,7 +8,7 @@ export class TicketCreatedListener extends Listener<TicketCreatedEvent> {
   subject: Subjects.TicketCreated = Subjects.TicketCreated;
   queueGroupName = queueGroupName;
 
-  async onMessage(data: TicketCreatedEvent['data'], msg: Message) {
+  async onMessage(data: TicketCreatedEvent['data'], message: Message) {
     const { id, title, price } = data;
 
     const ticket = Ticket.build({
@@ -18,6 +18,6 @@ export class TicketCreatedListener extends Listener<TicketCreatedEvent> {
     });
     await ticket.save();
 
-    msg.ack();
+    message.ack();
   }
 }
